@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد كلمات المرور الآمن</title>
+
+
+    <div class="footer">
+        ENG:Mahmoud MOSTAFA
+        <br>
+        phone number:01065504434
+    </div>
+    <h1> <hr>
+    <hr>
+    
+    </h1>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .content {
+            margin: 20px 0;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #35424a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #password {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #35424a;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>مولد كلمات المرور الآمن</h1>
+</header>
+
+<div class="content">
+    <h2>توليد كلمة مرور جديدة</h2>
+    <label for="length">طول كلمة المرور:</label>
+    <input type="number" id="length" value="12" min="4" max="20">
+    <br><br>
+    <label>
+        <input type="checkbox" id="includeUppercase" checked>
+        استخدام أحرف كبيرة
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id="includeNumbers" checked>
+        استخدام أرقام
+    </label>
+    <br>
+    <label>
+        <input type="checkbox" id="includeSymbols" checked>
+        استخدام رموز خاصة
+    </label>
+    <br><br>
+    <button onclick="generatePassword()">توليد كلمة مرور</button>
+    <p id="password"></p>
+</div>
+
+<script>
+    function generatePassword() {
+        const length = document.getElementById('length').value;
+        const includeUppercase = document.getElementById('includeUppercase').checked;
+        const includeNumbers = document.getElementById('includeNumbers').checked;
+        const includeSymbols = document.getElementById('includeSymbols').checked;
+
+        let charset = "abcdefghijklmnopqrstuvwxyz"; // أحرف صغيرة
+        if (includeUppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // أحرف كبيرة
+        if (includeNumbers) charset += "0123456789"; // أرقام
+        if (includeSymbols) charset += "!@#$%^&*()_+[]{}|;:,.<>?"; // رموز خاصة
+
+        let password = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            password += charset[randomIndex];
+        }
+
+        document.getElementById('password').textContent = password;
+    }
+</script>
+
+</body>
+</html>

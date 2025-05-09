@@ -1,0 +1,110 @@
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Description" content="hallo">
+    <meta name="author" content="mahmoud mostafa">
+    <meta name="http-equiv" =refresh content="4"
+    <meta name="keywords" content="Document">
+
+    
+    <title>لعبة اللغز</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        #restartButton {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>مرحبًا بك في لعبة اللغز!</h1>
+    <p id="hint"></p>
+    <input type="text" id="guess" placeholder="خمن الكلمة هنا">
+    <button onclick="checkGuess()">تخمين</button>
+    <p id="message"></p>
+    <p id="attempts"></p>
+    <button id="restartButton" onclick="startGame()">إعادة تشغيل اللعبة</button>
+
+    <script>
+        const words = {
+            "تفاح": "فاكهة حمراء أو خضراء.",
+            "موز": "فاكهة صفراء ومحبوبة.",
+            "برتقال": "فاكهة دائرية وغنية بفيتامين C.",
+            "عنب": "فاكهة صغيرة يمكن أن تكون حمراء أو زرقاء.",
+            "فراولة": "فاكهة حمراء ولها بذور على السطح.",
+            "بطيخ": "فاكهة كبيرة ومائية، غالبًا ما تؤكل في الصيف.",
+            "خوخ": "فاكهة حلوة ولها قشرة ناعمة.",
+            "كيوي": "فاكهة صغيرة بنية اللون من الخارج وخضراء من الداخل.",
+            "أناناس": "فاكهة استوائية ذات قشرة خشنة وطعم حلو.",
+            "ليمون": "فاكهة صفراء حامضة تستخدم في العصائر.",
+            "جوافة": "فاكهة استوائية ذات طعم حلو ورائحة مميزة.",
+            "رمان": "فاكهة تحتوي على حبوب حمراء وعصير لذيذ.",
+            "تمر": "فاكهة جافة حلوة، غالبًا ما تؤكل في رمضان.",
+            "كستناء": "فاكهة بنية اللون، تُؤكل مشوية.",
+            "زيتون": "فاكهة تُستخدم في صنع الزيت.",
+            "فستق": "مكسرات خضراء تُؤكل كوجبة خفيفة.",
+            "جوز": "مكسرات بنية تُستخدم في الحلويات.",
+            "لوز": "مكسرات تُستخدم في الطهي والحلويات.",
+            "بندق": "مكسرات دائرية تُستخدم في الحلويات.",
+            "كوسا": "خضار خضراء تُستخدم في الطهي.",
+            "جزر": "خضار برتقالية تُستخدم في السلطات.",
+            "بطاطس": "خضار تُستخدم في العديد من الأطباق.",
+            "فلفل": "خضار يمكن أن تكون حارة أو حلوة.",
+            "بصل": "خضار تُستخدم في الطهي وتضيف نكهة.",
+            "ثوم": "خضار تُستخدم في الطهي ولها رائحة قوية.",
+            "سبانخ": "خضار خضراء غنية بالحديد.",
+            "قرنبيط": "خضار بيضاء تُستخدم في الطهي.",
+            "بروكلي": "خضار خضراء تُعتبر مفيدة للصحة.",
+            "فجل": "خضار حارة تُستخدم في السلطات.",
+            "كرفس": "خضار تُستخدم في السلطات والشوربات.",
+            "فاصوليا": "بقوليات تُستخدم في الأطباق المختلفة.",
+            "حمص": "بقوليات تُستخدم في صنع الحمص.",
+            "عدس": "بقوليات غنية بالبروتين.",
+        };
+
+let word, hint;
+let attempts = 3;
+
+function startGame() {
+    const keys = Object.keys(words);
+    word = keys[Math.floor(Math.random() * keys.length)];
+    hint = words[word];
+    document.getElementById("hint").innerText = "تلميح: " + hint;
+    document.getElementById("attempts").innerText = "لديك " + attempts + " محاولات.";
+    document.getElementById("message").innerText = "";
+}
+
+function checkGuess() {
+    const guess = document.getElementById("guess").value;
+    if (guess === word) {
+        document.getElementById("message").innerText = "مبروك! لقد خمنت الكلمة الصحيحة.";
+    } else {
+        attempts--;
+        if (attempts > 0) {
+            document.getElementById("message").innerText = "خطأ! حاول مرة أخرى.";
+            document.getElementById("attempts").innerText = "لديك " + attempts + " محاولات.";
+        } else {
+            document.getElementById("message").innerText = "آسف، الكلمة كانت: " + word;
+            document.getElementById("attempts").innerText = "";
+        }
+    }
+    document.getElementById("guess").value = ""; // مسح حقل الإدخال
+}
+
+// بدء اللعبة عند تحميل الصفحة
+window.onload = startGame;
+</script>
+</body>
+</html>
+

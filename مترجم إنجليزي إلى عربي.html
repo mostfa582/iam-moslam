@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!-- saved from url=(0147)http://localhost:63342/%D9%85%D8%AA%D8%B1%D8%AC%D9%85/%D9%85%D8%AA%D8%B1%D8%AC%D9%85.html?_ijt=6vmh1kcqcnh3r9t61s4ek48fl1&_ij_reload=RELOAD_ON_SAVE -->
+<html lang="ar"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مترجم إنجليزي إلى عربي</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>مترجم إنجليزي إلى عربي</h1>
+    <textarea id="inputText" placeholder="أدخل النص هنا..."></textarea>
+    <button onclick="translateText()">ترجم</button>
+    <h2>النص المترجم:</h2>
+    <p id="translatedText"></p>
+</div>
+
+<div class="footer">
+    صممه محمود مصطفي
+</div>
+
+<script>
+    function translateText() {
+        const inputText = document.getElementById('inputText').value;
+        let translatedText = '';
+
+        // قاموس الكلمات
+        const dictionary = {
+            "hello": "مرحبا",
+            "world": "عالم",
+            "how": "كيف",
+            "are": "أنت",
+            "you": "أنت",
+            "good": "جيد",
+            "morning": "صباح",
+            "evening": "مساء",
+            "thank": "شكرا",
+            "please": "من فضلك",
+            "yes": "نعم",
+            "no": "لا",
+            "friend": "صديق",
+            "love": "حب",
+            "family": "عائلة",
+            "happy": "سعيد",
+            "sad": "حزين",
+            "food": "طعام",
+            "water": "ماء",
+            "house": "منزل",
+            "car": "سيارة",
+            "book": "كتاب",
+            "school": "مدرسة",
+            "teacher": "معلم",
+            "student": "طالب",
+            "work": "عمل",
+            "play": "لعب",
+            "music": "موسيقى",
+            "dance": "رقص",
+            "run": "ركض",
+            "walk": "مشى",
+            "see": "رأى",
+            "hear": "سمع",
+            "speak": "تحدث",
+            "read": "قرأ",
+            "write": "كتب",
+            "life": "حياة",
+            "time": "وقت",
+            "day": "يوم",
+            "night": "ليل",
+            "city": "مدينة",
+            "country": "بلد",
+            "knowledge": "معرفة",
+            "education": "تعليم",
+            "child": "طفل",
+            "beautiful": "جميل",
+            "ugly": "قبيح",
+            "big": "كبير",
+            "small": "صغير",
+            "fast": "سريع",
+            "slow": "بطيء",
+            "hot": "حار",
+            "cold": "بارد",
+            "easy": "سهل",
+            "difficult": "صعب",
+            "strong": "قوي",
+            "weak": "ضعيف",
+            "rich": "غني",
+            "poor": "فقير",
+            "angry": "غاضب",
+            "tired": "متعب",
+            "hungry": "جائع",
+            "thirsty": "عطشان",
+            "busy": "مشغول",
+            "free": "حر",
+            "study": "دراسة",
+            "listen": "استماع",
+            "watch": "شاهد",
+            "smell": "شَمّ",
+            "taste": "ذوق",
+            "feel": "شعر",
+            "think": "فكر",
+            "believe": "آمن",
+            "know": "عرف",
+            "understand": "فهم",
+            "remember": "تذكر",
+            "forget": "نسي",
+            "want": "أراد",
+            "need": "احتاج",
+            "like": "أحب",
+            "dislike": "لا أحب",
+            "hate": "أكره",
+            "enjoy": "استمتع",
+            "prefer": "يفضل",
+            "choose": "اختار",
+            "decide": "قرر",
+            "ask": "سأل",
+            "answer": "أجاب",
+            "tell": "أخبر",
+            "show": "أظهر",
+            "give": "أعطى",
+            "take": "أخذ",
+            "bring": "أحضر",
+            "send": "أرسل",
+            "call": "اتصل",
+            "text": "نص",
+            "email": "بريد إلكتروني",
+            "message": "رسالة",
+            "conversation": "محادثة",
+            "question": "سؤال",
+            "problem": "مشكلة",
+            "solution": "حل",
+            "idea": "فكرة",
+            "plan": "خطة",
+            "project": "مشروع",
+            "goal": "هدف",
+            "dream": "حلم",
+            "future": "مستقبل",
+            "past": "ماضي",
+            "present": "حاضر",
+            "life": "حياة",
+            "death": "موت",
+            "time": "وقت",
+            "day": "يوم",
+            "night": "ليل",
+            "morning": "صباح",
+            "evening": "مساء",
+            "week": "أسبوع",
+            "month": "شهر",
+            "year": "سنة",
+            "season": "فصل",
+            "weather": "طقس",
+            "sun": "شمس",
+            "moon": "قمر",
+            "star": "نجمة",
+            "sky": "سماء",
+            "earth": "أرض",
+            "water": "ماء",
+            "fire": "نار",
+            "air": "هواء",
+            "nature": "طبيعة",
+            "animal": "حيوان",
+            "plant": "نبات",
+            "tree": "شجرة",
+            "flower": "زهرة",
+            "grass": "عشب",
+            "mountain": "جبل",
+            "river": "نهر",
+            "sea": "بحر",
+            "ocean": "محيط",
+            "lake": "بحيرة",
+            "island": "جزيرة",
+            "desert": "صحراء",
+            "forest": "غابة",
+            "continent": "قارة",
+            "map": "خريطة",
+            "i am mahmoud": "أنا محمود" // إضافة العبارة هنا
+        };
+        // تقسيم النص إلى كلمات وترجمته
+        const words = inputText.split(' ');
+        for (let word of words) {
+            translatedText += (dictionary[word.toLowerCase()] || word) + ' ';
+        }
+
+        document.getElementById('translatedText').innerText = translatedText.trim();
+    }
+</script>
+
+
+<script>
+(function() {
+  var ws = new WebSocket('ws://' + window.location.host + 
+             '/jb-server-page?reloadMode=RELOAD_ON_SAVE&'+
+             'referrer=' + encodeURIComponent(window.location.pathname));
+  ws.onmessage = function (msg) {
+      if (msg.data === 'reload') {
+          window.location.reload();
+      }
+      if (msg.data.startsWith('update-css ')) {
+          var messageId = msg.data.substring(11);
+          var links = document.getElementsByTagName('link');
+          for (var i = 0; i < links.length; i++) {
+              var link = links[i];
+              if (link.rel !== 'stylesheet') continue;
+              var clonedLink = link.cloneNode(true);
+              var newHref = link.href.replace(/(&|\?)jbUpdateLinksId=\d+/, "$1jbUpdateLinksId=" + messageId);
+              if (newHref !== link.href) {
+                clonedLink.href = newHref;
+              }
+              else {
+                var indexOfQuest = newHref.indexOf('?');
+                if (indexOfQuest >= 0) {
+                  // to support ?foo#hash 
+                  clonedLink.href = newHref.substring(0, indexOfQuest + 1) + 'jbUpdateLinksId=' + messageId + '&' + 
+                                    newHref.substring(indexOfQuest + 1);
+                }
+                else {
+                  clonedLink.href += '?' + 'jbUpdateLinksId=' + messageId;
+                }
+              }
+              link.replaceWith(clonedLink);
+          }
+      }
+  };
+})();
+</script></body></html>

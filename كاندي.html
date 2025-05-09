@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لعبة مطابقة الحلوى - متعددة المستويات</title>
+  <div>
+    <h6>محمود مصطفي</h6>
+    
+  </div>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      text-align: center;
+      direction: rtl;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(8, 60px);
+      gap: 5px;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+    .candy {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      transition: transform 0.3s ease;
+      box-shadow: inset 0 0 8px #00000022;
+    }
+
+    .red { background-color: red; }
+    .green { background-color: green; }
+    .blue { background-color: blue; }
+    .yellow { background-color: yellow; }
+    .purple { background-color: purple; }
+    .orange { background-color: orange; }
+
+    .flash {
+      animation: flash 0.4s ease-in-out;
+    }
+
+    @keyframes flash {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .info {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    #progressBar {
+      height: 10px;
+      width: 100%;
+      background: #ddd;
+      border-radius: 5px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    #progress {
+      height: 100%;
+      background: #4caf50;
+      transition: width 1s linear;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍬 لعبة مطابقة الحلوى</h1>
+    <div class="info">المستوى: <span id="level">1</span> | الهدف: <span id="goal">10</span></div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="info">النقاط: <span id="score">0</span></div>
+    <div class="info">الوقت: <span id="time">60</span> ثانية</div>
+    <div id="progressBar"><div id="progress"></div></div>
+    <button onclick="restartGame()">🔄 إعادة التشغيل</button>
+  </div>
+
+  <!-- الأصوات -->
+  <audio id="matchSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_3f45b11be2.mp3"></audio>
+  <audio id="endSound" src="https://cdn.pixabay.com/audio/2022/03/16/audio_352f2b269f.mp3"></audio>
+
+  <script>
+    const width = 8;
+    const board = document.getElementById('gameBoard');
+    const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+    const scoreDisplay = document.getElementById('score');
+    const timeDisplay = document.getElementById('time');
+    const levelDisplay = document.getElementById('level');
+    const goalDisplay = document.getElementById('goal');
+    const progressBar = document.getElementById('progress');
+
+    const matchSound = document.getElementById('matchSound');
+    const endSound = document.getElementById('endSound');
+
+    let squares = [];
+    let score = 0;
+    let timeLeft = 60;
+    let timer;
+    let level = 1;
+    let goal = 10;
+
+    function createBoard() {
+      board.innerHTML = '';
+      squares = [];
+      for (let i = 0; i < width * width; i++) {
+        const div = document.createElement('div');
+        div.setAttribute('draggable', true);
+        div.setAttribute('data-id', i);
+        div.className = 'candy ' + randomColor();
+        board.appendChild(div);
+        squares.push(div);
+      }
+    }
+
+    function randomColor() {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = timeLeft;
+        progressBar.style.width = (timeLeft / 60) * 100 + '%';
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          endSound.play();
+          if (score >= goal) {
+            alert('✅ أحسنت! الانتقال إلى المستوى التالي.');
+            level++;
+            goal += 10;
+            timeLeft = 60;
+            score = 0;
+            updateDisplays();
+            createBoard();
+            addEvents();
+            startTimer();
+          } else {
+            alert('❌ انتهى الوقت! لم تحقق الهدف.');
+          }
+        }
+      }, 1000);
+    }
+
+    function updateDisplays() {
+      levelDisplay.textContent = level;
+      goalDisplay.textContent = goal;
+      scoreDisplay.textContent = score;
+      timeDisplay.textContent = timeLeft;
+      progressBar.style.width = '100%';
+    }
+
+    let colorDragged, colorReplaced, idDragged, idReplaced;
+
+    function dragStart() {
+      colorDragged = this.classList[1];
+      idDragged = parseInt(this.dataset.id);
+    }
+
+    function dragDrop() {
+      colorReplaced = this.classList[1];
+      idReplaced = parseInt(this.dataset.id);
+      if (isValidMove(idDragged, idReplaced)) {
+        squares[idDragged].className = 'candy ' + colorReplaced;
+        squares[idReplaced].className = 'candy ' + colorDragged;
+      }
+    }
+
+    function dragEnd() {
+      if (checkForMatches()) {
+        checkAndRemoveMatches();
+      } else {
+        if (idReplaced !== undefined) {
+          squares[idDragged].className = 'candy ' + colorDragged;
+          squares[idReplaced].className = 'candy ' + colorReplaced;
+        }
+      }
+      idDragged = idReplaced = undefined;
+    }
+
+    function isValidMove(id1, id2) {
+      const validMoves = [id1 - 1, id1 + 1, id1 - width, id1 + width];
+      return validMoves.includes(id2);
+    }
+
+    function addEvents() {
+      squares.forEach(sq => {
+        sq.addEventListener('dragstart', dragStart);
+        sq.addEventListener('drop', dragDrop);
+        sq.addEventListener('dragend', dragEnd);
+        sq.addEventListener('dragover', e => e.preventDefault());
+      });
+    }
+
+    function checkForMatches() {
+      for (let i = 0; i < 64; i++) {
+        let color = squares[i].classList[1];
+        if (i % width < width - 2) {
+          if (color === squares[i + 1]?.classList[1] && color === squares[i + 2]?.classList[1])
+            return true;
+        }
+        if (i < 64 - width * 2) {
+          if (color === squares[i + width]?.classList[1] && color === squares[i + width * 2]?.classList[1])
+            return true;
+        }
+      }
+      return false;
+    }
+
+    function checkAndRemoveMatches() {
+      let matched = [];
+
+      for (let i = 0; i < 64; i++) {
+        let color = squares[i].classList[1];
+        if (i % width < width - 2) {
+          if (color === squares[i + 1]?.classList[1] && color === squares[i + 2]?.classList[1]) {
+            matched.push(i, i + 1, i + 2);
+          }
+        }
+        if (i < 64 - width * 2) {
+          if (color === squares[i + width]?.classList[1] && color === squares[i + width * 2]?.classList[1]) {
+            matched.push(i, i + width, i + width * 2);
+          }
+        }
+      }
+
+      matched = [...new Set(matched)];
+      matched.forEach(i => {
+        squares[i].classList.add('flash');
+        setTimeout(() => {
+          squares[i].className = 'candy ' + randomColor();
+        }, 300);
+      });
+
+      if (matched.length > 0) {
+        score += matched.length;
+        matchSound.play();
+        scoreDisplay.textContent = score;
+      }
+    }
+
+    function restartGame() {
+      level = 1;
+      goal = 10;
+      score = 0;
+      timeLeft = 60;
+      updateDisplays();
+      createBoard();
+      addEvents();
+      startTimer();
+    }
+
+    // بدء اللعبة
+    createBoard();
+    addEvents();
+    updateDisplays();
+    startTimer();
+  </script>
+</body>
+</html>

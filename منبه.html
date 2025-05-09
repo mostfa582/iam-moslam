@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منبه متطور مع ساعة عالمية</title>
+    <div class="footer">
+        <h6>        ENG:Mahmoud MOSTAFA
+        <br>  <h6><br> <hr><hr><hr><hr></h6>  
+        phone number:01065504434</h6>
+
+    </div>  
+
+
+    <style>
+        h6{
+            color: aliceblue;
+      text-align: end;
+      
+        }w
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000000;
+            padding: 50px;
+        }
+        h1 {
+            color: #575757;
+        }
+        input[type="time"] {
+            padding: 10px;
+            font-size: 16px;
+            margin: 20px 0;
+            border: 2px solid #ffffff73;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #stopButton {
+            background-color: #d32f2f;
+        }
+        #stopButton:hover {
+            background-color: #c62828;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+        #worldClock {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>منبه متطور</h1>
+    <p>اختر الوقت الذي تريد ضبط المنبه عليه:</p>
+    <input type="time" id="alarmTime">
+    <br>
+    <button onclick="setAlarm()">ضبط المنبه</button>
+    <button id="stopButton" onclick="stopAlarm()">إيقاف الصوت</button>
+    <div id="message"></div>
+
+    <div id="worldClock"></div>
+
+    <script>
+        let alarmTimeout;
+        let audio;
+
+        function setAlarm() {
+            const alarmTime = document.getElementById("alarmTime").value;
+            if (!alarmTime) {
+                alert("الرجاء اختيار وقت المنبه!");
+                return;
+            }
+
+            const now = new Date();
+            const [hours, minutes] = alarmTime.split(":");
+            const alarmDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+
+            const timeDifference = alarmDate - now;
+            if (timeDifference < 0) {
+                alert("الوقت المحدد قد مضى! الرجاء اختيار وقت في المستقبل.");
+                return;
+            }
+
+            clearTimeout(alarmTimeout); // إلغاء أي منبه سابق
+            alarmTimeout = setTimeout(() => {
+                playAlarm();
+                document.getElementById("message").innerText = "حان وقت المنبه!";
+            }, timeDifference);
+
+            document.getElementById("message").innerText = `تم ضبط المنبه على الساعة ${alarmTime}`;
+        }
+
+        function playAlarm() {
+            audio = new Audio("mmm.mp3"); // رابط صوتي
+            audio.loop = true; // جعل الصوت يتكرر
+            audio.play();
+        }
+
+        function stopAlarm() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0; // إعادة الصوت إلى البداية
+                document.getElementById("message").innerText = "تم إيقاف الصوت.";
+            }
+        }
+
+        function updateWorldClock() {
+            const now = new Date();
+            const utc = now.toUTCString().split(" ")[4]; // الحصول على الوقت بتنسيق UTC
+            document.getElementById("worldClock").innerText = `الوقت العالمي (UTC): ${utc}`;
+        }
+
+        // تحديث الساعة العالمية كل ثانية
+        setInterval(updateWorldClock, 1000);
+        updateWorldClock(); // تحديث الساعة عند تحميل الصفحة
+    </script>  
+</body>
+</html>
